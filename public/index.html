@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Sooo NOT The Nanny</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+  <header>
+    <nav class="navbar container">
+      <div class="logo">Sooo NOT The Nanny</div>
+      <button class="nav-toggle"><span class="bar"></span><span class="bar"></span><span class="bar"></span></button>
+      <ul class="nav-menu">
+        <li><a href="#services">Services</a></li>
+        <li><a href="/blog">Stories</a></li>
+        <li><a href="#scheduler">Book</a></li>
+        <li><a href="/admin">Admin</a></li>
+      </ul>
+      <a href="#scheduler" class="cta-button">Book Sass!</a>
+    </nav>
+  </header>
+
+  <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg>...</svg>'); padding: 120px 0; text-align: center; color: white;">
+    <div class="container">
+      <h1 style="font-size: 3.5rem; animation: bounce 2s infinite;">Sooo NOT Your Average Nanny!</h1>
+      <p style="font-size: 1.3rem;">In-home care with sass, snacks, and zero drama!</p>
+      <a href="#scheduler" class="cta-button">Get Your Sass-Ter!</a>
+    </div>
+  </section>
+
+  <section id="scheduler" style="padding: 80px 0;">
+    <div class="container">
+      <h2 style="text-align: center; color: #ff6b6b; font-size: 2.5rem;">Book Your Sassy Session</h2>
+      <form id="bookingForm" style="max-width: 600px; margin: 2rem auto; background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+        <input type="text" id="name" placeholder="Your Name" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;" />
+        <input type="email" id="email" placeholder="Email" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;" />
+        <select id="service" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;">
+          <option value="">Choose Service</option>
+          <option value="Saturday Tag Team" data-price="120" data-per-kid="20">Saturday Tag Team</option>
+          <option value="A Fun Plus 1" data-price="80">A Fun Plus 1</option>
+          <option value="Bus Stop Helping Hand" data-price="50">Bus Stop Helping Hand</option>
+          <option value="Weeknight Getaways" data-price="90">Weeknight Getaways</option>
+        </select>
+        <input type="datetime-local" id="datetime" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;" />
+        <select id="kids" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;">
+          <option value="">Kids?</option>
+          <option value="1">1</option>
+          <option value="2-3">2-3</option>
+          <option value="4+">4+</option>
+        </select>
+        <select id="paymentMethod" required style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;">
+          <option value="">Pay With</option>
+          <option value="paypal">PayPal</option>
+          <option value="stripe">Card (Stripe)</option>
+          <option value="cash">Pay Cash (On Arrival)</option>
+        </select>
+        <div id="paypal-button-container" class="hidden"></div>
+        <div id="stripe-card" class="hidden"></div>
+        <div style="font-weight:bold;color:#e91e63;margin:15px 0;">Total: $<span id="total">0</span></div>
+        <button type="submit" class="cta-button" style="width:100%;margin-top:10px;">Secure My Spot!</button>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    const service = document.getElementById('service');
+    const kids = document.getElementById('kids');
+    const total = document.getElementById('total');
+    const paymentMethod = document.getElementById('paymentMethod');
+    const paypalDiv = document.getElementById('paypal-button-container');
+    const stripeDiv = document.getElementById('stripe-card');
+
+    function calcPrice() {
+      const s = service.selectedOptions[0];
+      if (!s || !s.dataset.price) return;
+      let base = parseFloat(s.dataset.price);
+      const kidCount = kids.value === '1' ? 1 : kids.value === '2-3' ? 2.5 : 4;
+      if (s.dataset.perKid) base += kidCount * parseFloat(s.dataset.perKid);
+      total.textContent = base.toFixed(2);
+    }
+    service.addEventListener('change', calcPrice);
+    kids.addEventListener('change', calcPrice);
+
+    let stripe, card;
+    paymentMethod.addEventListener('change', async () => {
+      paypalDiv.classList.add('hidden');
+      stripeDiv.classList.add('hidden');
+      paypalDiv.innerHTML = '';
+      if (paymentMethod.value === 'paypal') {
+        paypalDiv.classList.remove('hidden');
+        paypalDiv.innerHTML = '<p style="color:#e91e63;font-weight:bold;">PayPal coming soon! Contact us to book.</p>';
+      } else if (paymentMethod.value === 'stripe') {
+        stripeDiv.classList.remove('hidden');
+        const res = await fetch('/api/admin/config');
+        const { stripePublishableKey } = await res.json();
+        if (!stripePublishableKey) return alert('Stripe not set up yet!');
+        stripe = Stripe(stripePublishableKey);
+        const elements = stripe.elements();
+        card = elements.create('card', { style: { base: { fontSize: '16px', color: '#333' } } });
+        card.mount('#stripe-card');
+      }
+    });
+
+    document.getElementById('bookingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const method = paymentMethod.value;
+      let paymentId = null;
+
+      if (method === 'stripe') {
+        const amount = parseFloat(total.textContent);
+        const res = await fetch('/api/payment/stripe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ amount }) });
+        const { clientSecret } = await res.json();
+        const { error } = await stripe.confirmCardPayment(clientSecret, { payment_method: { card } });
+        if (error) return alert(error.message);
+      }
+
+      if (method === 'cash') {
+        if (!confirm('Pay cash on arrival. Confirm booking?')) return;
+      }
+
+      await submitBooking(method, paymentId);
+      alert('Booking confirmed! Check your email.');
+    });
+
+    async function submitBooking(paymentMethod, paymentId) {
+      const data = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        service: document.getElementById('service').value,
+        day: document.getElementById('datetime').value.split('T')[0],
+        time: document.getElementById('datetime').value.split('T')[1],
+        children: document.getElementById('kids').value,
+        price: parseFloat(total.textContent),
+        paymentMethod,
+        paymentId
+      };
+      await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Stories - Sooo NOT The Nanny</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <nav class="navbar container">
+      <div class="logo">Sooo NOT The Nanny</div>
+      <ul class="nav-menu">
+        <li><a href="/">Home</a></li>
+        <li><a href="/blog">Stories</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section style="padding: 80px 0; text-align: center;">
+    <div class="container">
+      <h1 style="font-size: 3rem; color: #ff6b6b;">Sassy Stories!</h1>
+      <div id="blog-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 2rem;"></div>
+    </div>
+  </section>
+
+  <script>
+    async function loadBlogs() {
+      const res = await fetch('/api/blogs');
+      const blogs = await res.json();
+      document.getElementById('blog-container').innerHTML = blogs.map(b => `
+        <div style="background:white;padding:2rem;border-radius:15px;box-shadow:0 10px 30px rgba(0,0,0,0.1);border-top:5px solid #ff6b6b;">
+          <h3 style="color:#ff6b6b;">${b.title}</h3>
+          <p>${b.content}</p>
+        </div>
+      `).join('');
+    }
+    loadBlogs();
+  </script>
+</body>
+</html>

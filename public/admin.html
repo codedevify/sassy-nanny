@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin - Sooo NOT The Nanny</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body style="background: #f8f9fa;">
+  <div id="login" style="max-width:400px;margin:100px auto;background:white;padding:2rem;border-radius:20px;box-shadow:0 10px 30px rgba(0,0,0,0.1);text-align:center;">
+    <h2 style="color:#ff6b6b;">Admin Login</h2>
+    <input type="password" id="password" placeholder="Password" style="width:100%;padding:12px;margin:10px 0;border:2px solid #ffd700;border-radius:10px;" />
+    <button onclick="login()" class="cta-button" style="width:100%;">Enter Sass Zone</button>
+  </div>
+
+  <div id="dashboard" class="hidden container" style="margin-top:50px;">
+    <h1 style="text-align:center;color:#ff6b6b;">Sassy Admin Dashboard</h1>
+
+    <!-- Payment & Email Config -->
+    <div style="background:white;padding:2rem;border-radius:15px;margin:2rem 0;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+      <h3>Payment & Email Settings</h3>
+      <input type="text" id="paypalClientId" placeholder="PayPal Client ID" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="text" id="paypalSecret" placeholder="PayPal Secret" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="text" id="stripeSecretKey" placeholder="Stripe Secret Key" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="text" id="stripePublishableKey" placeholder="Stripe Publishable Key" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="email" id="adminEmail" placeholder="Admin Email (receives bookings)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="email" id="gmailUser" placeholder="Gmail User (sender)" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="password" id="gmailAppPass" placeholder="Gmail App Password" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <input type="password" id="configPass" placeholder="Admin Password to Save" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <button onclick="saveConfig()" class="cta-button">Save Settings</button>
+    </div>
+
+    <!-- Add Blog -->
+    <div style="background:white;padding:2rem;border-radius:15px;margin:2rem 0;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+      <h3>Add Blog</h3>
+      <input type="text" id="title" placeholder="Title" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <textarea id="content" placeholder="Content" rows="4" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;"></textarea>
+      <input type="password" id="pass1" placeholder="Password" style="width:100%;padding:10px;margin:5px 0;border:1px solid #ddd;border-radius:8px;" />
+      <button onclick="addBlog()" class="cta-button">Add Blog</button>
+    </div>
+
+    <!-- Blogs -->
+    <div style="background:white;padding:2rem;border-radius:15px;margin:2rem 0;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+      <h3>Blogs</h3>
+      <div id="blogList"></div>
+    </div>
+
+    <!-- Bookings -->
+    <div style="background:white;padding:2rem;border-radius:15px;margin:2rem 0;box-shadow:0 5px 15px rgba(0,0,0,0.1);">
+      <h3>Bookings</h3>
+      <table style="width:100%;border-collapse:collapse;">
+        <thead><tr style="background:#ffd700;"><th>Name</th><th>Email</th><th>Service</th><th>Kids</th><th>Price</th><th>Date</th><th>Time</th><th>Status</th><th>Action</th></tr></thead>
+        <tbody id="bookingBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    async function login() {
+      if (document.getElementById('password').value === 'admin123') {
+        document.getElementById('login').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        loadConfig();
+        loadBlogs();
+        loadBookings();
+      } else {
+        alert('Wrong password!');
+      }
+    }
+
+    async function loadConfig() {
+      const res = await fetch('/api/admin/config');
+      const config = await res.json();
+      document.getElementById('paypalClientId').value = config.paypalClientId || '';
+      document.getElementById('paypalSecret').value = config.paypalSecret || '';
+      document.getElementById('stripeSecretKey').value = config.stripeSecretKey || '';
+      document.getElementById('stripePublishableKey').value = config.stripePublishableKey || '';
+      document.getElementById('adminEmail').value = config.adminEmail || '';
+      document.getElementById('gmailUser').value = config.gmailUser || '';
+      document.getElementById('gmailAppPass').value = config.gmailAppPass || '';
+    }
+
+    async function saveConfig() {
+      const data = {
+        password: document.getElementById('configPass').value,
+        paypalClientId: document.getElementById('paypalClientId').value,
+        paypalSecret: document.getElementById('paypalSecret').value,
+        stripeSecretKey: document.getElementById('stripeSecretKey').value,
+        stripePublishableKey: document.getElementById('stripePublishableKey').value,
+        adminEmail: document.getElementById('adminEmail').value,
+        gmailUser: document.getElementById('gmailUser').value,
+        gmailAppPass: document.getElementById('gmailAppPass').value
+      };
+      const res = await fetch('/api/admin/config', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
+      if (res.ok) alert('Settings saved!');
+      else alert('Wrong password!');
+    }
+
+    // Blog & Booking functions (same as before)
+    async function loadBlogs() {
+      const res = await fetch('/api/blogs');
+      const blogs = await res.json();
+      document.getElementById('blogList').innerHTML = blogs.map(b => `
+        <div style="border-bottom:1px solid #eee;padding:15px 0;display:flex;justify-content:space-between;align-items:center;">
+          <div><strong>${b.title}</strong><br><small>${new Date(b.createdAt).toLocaleString()}</small></div>
+          <button onclick="deleteBlog('${b._id}')" style="background:#e91e63;color:white;padding:8px 15px;border:none;border-radius:8px;cursor:pointer;">Delete</button>
+        </div>
+      `).join('') || '<p>No blogs yet.</p>';
+    }
+
+    async function deleteBlog(id) {
+      const password = prompt('Admin Password:');
+      if (!password) return;
+      const res = await fetch(`/api/blogs/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+      if (res.ok) { alert('Deleted!'); loadBlogs(); } else alert('Wrong password!');
+    }
+
+    async function addBlog() {
+      const title = document.getElementById('title').value;
+      const content = document.getElementById('content').value;
+      const password = document.getElementById('pass1').value;
+      if (!title || !content) return alert('Fill title & content!');
+      await fetch('/api/blogs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ title, content, password }) });
+      alert('Blog added!');
+      loadBlogs();
+    }
+
+    async function loadBookings() {
+      const res = await fetch('/api/bookings');
+      const bookings = await res.json();
+      document.getElementById('bookingBody').innerHTML = bookings.map(b => `
+        <tr style="border-bottom:1px solid #eee;">
+          <td>${b.name}</td>
+          <td>${b.email}</td>
+          <td><strong>${b.service}</strong></td>
+          <td>${b.children}</td>
+          <td>$${b.price}</td>
+          <td>${b.day}</td>
+          <td>${b.time}</td>
+          <td>${b.status}</td>
+          <td><button onclick="deleteBooking('${b._id}')" style="background:#e91e63;color:white;padding:5px 10px;border:none;border-radius:5px;cursor:pointer;">Delete</button></td>
+        </tr>
+      `).join('');
+    }
+
+    async function deleteBooking(id) {
+      const password = prompt('Admin Password:');
+      if (!password) return;
+      await fetch(`/api/bookings/${id}`, { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ password }) });
+      loadBookings();
+    }
+  </script>
+</body>
+</html>

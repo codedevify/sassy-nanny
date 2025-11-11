@@ -1,0 +1,24 @@
+{
+  "name": "nanny",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^4.21.1",
+    "helmet": "^8.0.0",
+    "mongoose": "^8.8.0",
+    "morgan": "^1.10.0",
+    "nodemailer": "^6.9.15",
+    "paypal-rest-sdk": "^1.8.1",
+    "stripe": "^16.12.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
