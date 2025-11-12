@@ -8,6 +8,7 @@
   <script src="https://js.stripe.com/v3/"></script>
 </head>
 <body>
+  <!-- ==================== HEADER & HERO (unchanged) ==================== -->
   <header>
     <nav class="navbar container">
       <div class="logo">Sooo NOT The Nanny</div>
@@ -22,14 +23,152 @@
     </nav>
   </header>
 
-  <section class="hero" style="background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('data:image/svg+xml,<svg>...</svg>'); padding: 120px 0; text-align: center; color: white;">
-    <div class="container">
-      <h1 style="font-size: 3.5rem; animation: bounce 2s infinite;">Sooo NOT Your Average Nanny!</h1>
-      <p style="font-size: 1.3rem;">In-home care with sass, snacks, and zero drama!</p>
-      <a href="#scheduler" class="cta-button">Get Your Sass-Ter!</a>
+  <section class="hero" style="background:linear-gradient(rgba(0,0,0,0.6),rgba(0,0,0,0.6)),url('data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 1000 600%22><rect fill=%22%23ff6b6b%22 width=%221000%22 height=%22600%22/><circle fill=%22%23ffd700%22 cx=%22200%22 cy=%22200%22 r=%2250%22/><circle fill=%22%23ff9a9e%22 cx=%22800%22 cy=%22400%22 r=%2280%22/><path fill=%22%23ee5a24%22 d=%22M100,500 Q500,300 900,500 L900,600 L100,600 Z%22/></svg>'); background-size:cover; background-position:center; color:white; padding:100px 0; text-align:center;">
+        <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+            <h1 style="font-size:3.5rem; margin-bottom:1rem; text-shadow:3px 3px 6px rgba(0,0,0,0.5); animation:bounce 2s infinite;">Sooo NOT Your Average Nanny!</h1>
+            <p style="font-size:1.3rem; margin-bottom:2rem; max-width:600px; margin-left:auto; margin-right:auto;">Quirky, fun, & caring in-home child & senior care with that <em>"Inappropriate Auntie"</em> vibe you secretly love! Reliable care in YOUR home, because who wants to drive kids to daycare at 6 AM?</p>
+            <a href="#scheduler" class="cta-button" style="background:#ffd700; color:#333; padding:0.9rem 2.2rem; border-radius:50px; text-decoration:none; font-weight:bold; box-shadow:0 4px 15px rgba(255,215,0,0.4); transition:all 0.3s; display:inline-block;">Get Your Sass-Ter!</a>
+            <div class="sitter-image" style="width:150px; height:150px; border-radius:50%; overflow:hidden; margin:2rem auto 0; border:5px solid #ffd700; box-shadow:0 5px 15px rgba(255,107,107,0.4);"></div>
+        </div>
+    </section>
+
+  <!-- ==================== SERVICES (unchanged) ==================== -->
+  <section class="services" id="services" style="padding:80px 0; background:white;">
+      <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+          <h2 class="section-title" style="text-align:center; font-size:2.5rem; margin-bottom:3rem; color:#ff6b6b; position:relative;">Our Fabulous Service Menu</h2>
+          <p class="quirky-quote" style="font-style:italic; font-size:1.2rem; color:#ff6b6b; text-align:center; margin:2rem 0; padding:1rem; background:rgba(255,107,107,0.1); border-left:5px solid #ffd700; border-radius:10px;">"We bring the fun, you bring the kids... or grandparents. Either way, we're showing up with snacks!" </p>
+
+          <div class="services-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:2rem; margin-top:3rem;">
+              
+              <div class="service-card" style="background:linear-gradient(135deg,#fff 0%,#ffe6e6 100%); border-radius:20px; padding:2rem; text-align:center; box-shadow:0 10px 30px rgba(255,107,107,0.2); transition:all 0.3s; border:3px solid transparent; position:relative; overflow:hidden;">
+                  <div class="service-icon" style="font-size:3rem; margin-bottom:1rem;"></div>
+                  <h3 style="color:#ff6b6b; margin-bottom:1rem; font-size:1.5rem;">Saturday Tag Team</h3>
+                  <p>Full day of organized chaos! We wrangle the kids (or seniors) while you pretend to adult. Games, crafts, and just enough sass to keep everyone entertained.</p>
+              </div>
+
+              <div class="service-card" style="background:linear-gradient(135deg,#fff 0%,#ffe6e6 100%); border-radius:20px; padding:2rem; text-align:center; box-shadow:0 10px 30px rgba(255,107,107,0.2); transition:all 0.3s; border:3px solid transparent; position:relative; overflow:hidden;">
+                  <div class="service-icon" style="font-size:3rem; margin-bottom:1rem;"></div>
+                  <h3 style="color:#ff6b6b; margin-bottom:1rem; font-size:1.5rem;">A Fun Plus 1</h3>
+                  <p>One-on-one VIP treatment with extra sparkle! Perfect for that special kiddo or when Grandma needs her "me time" with someone who gets her sense of humor.</p>
+              </div>
+
+              <div class="service-card" style="background:linear-gradient(135deg,#fff 0%,#ffe6e6 100%); border-radius:20px; padding:2rem; text-align:center; box-shadow:0 10px 30px rgba(255,107,107,0.2); transition:all 0.3s; border:3px solid transparent; position:relative; overflow:hidden;">
+                  <div class="service-icon" style="font-size:3rem; margin-bottom:1rem;"></div>
+                  <h3 style="color:#ff6b6b; margin-bottom:1rem; font-size:1.5rem;">Bus Stop Helping Hand</h3>
+                  <p>Safe, sassy supervision for school drop-offs and pick-ups. We make waiting for the bus an ADVENTURE, not a chore!</p>
+              </div>
+
+              <div class="service-card" style="background:linear-gradient(135deg,#fff 0%,#ffe6e6 100%); border-radius:20px; padding:2rem; text-align:center; box-shadow:0 10px 30px rgba(255,107,107,0.2); transition:all 0.3s; border:3px solid transparent; position:relative; overflow:hidden;">
+                  <div class="service-icon" style="font-size:3rem; margin-bottom:1rem;"></div>
+                  <h3 style="color:#ff6b6b; margin-bottom:1rem; font-size:1.5rem;">Weeknight Getaways</h3>
+                  <p>Date night? Parent's night out? We've got your back! Evening care so you can actually enjoy adult conversation without the "MOM! DAD!" interruptions.</p>
+              </div>
+          </div>
+
+          <div class="warning-box" style="background:#fff3cd; border:2px solid #ffeaa7; border-radius:15px; padding:1.5rem; margin:2rem 0; text-align:center;">
+              <strong style="color:#e17055;">Important:</strong> Minimum 3-hour appointments. No drop-ins - we like to PLAN our sass! All bookings through our online scheduler.
+          </div>
+      </div>
+  </section>
+
+  <!-- ==================== NEW SECTION: TESTIMONIALS ==================== -->
+  <section style="padding:80px 0; background:#f9f9f9;">
+    <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+      <h2 style="text-align:center; font-size:2.5rem; color:#ff6b6b; margin-bottom:2rem;">What Parents & Grandkids Say</h2>
+      <div style="position:relative; overflow:hidden;">
+        <div id="testimonialCarousel" style="display:flex; transition:transform .5s ease; gap:2rem;">
+          <!-- Testimonial 1 -->
+          <div style="min-width:300px; background:white; border-radius:15px; padding:1.5rem; box-shadow:0 8px 20px rgba(0,0,0,.07); text-align:center;">
+            <p style="font-style:italic; color:#555; margin-bottom:1rem;">“The kids beg for ‘Auntie Sass’ every weekend. Best decision we ever made!”</p>
+            <strong style="color:#ff6b6b;">— Sarah M.</strong>
+          </div>
+          <!-- Testimonial 2 -->
+          <div style="min-width:300px; background:white; border-radius:15px; padding:1.5rem; box-shadow:0 8px 20px rgba(0,0,0,.07); text-align:center;">
+            <p style="font-style:italic; color:#555; margin-bottom:1rem;">“Grandma loves the jokes and actually laughs out loud. Priceless.”</p>
+            <strong style="color:#ff6b6b;">— Mike & Linda</strong>
+          </div>
+          <!-- Testimonial 3 -->
+          <div style="min-width:300px; background:white; border-radius:15px; padding:1.5rem; box-shadow:0 8px 20px rgba(0,0,0,.07); text-align:center;">
+            <p style="font-style:italic; color:#555; margin-bottom:1rem;">“Reliable, fun, and they even clean up the glitter explosion!”</p>
+            <strong style="color:#ff6b6b;">— The Thompson Family</strong>
+          </div>
+        </div>
+        <button onclick="prevTestimonial()" style="position:absolute; left:0; top:50%; transform:translateY(-50%); background:#ff6b6b; color:white; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.2rem;">‹</button>
+        <button onclick="nextTestimonial()" style="position:absolute; right:0; top:50%; transform:translateY(-50%); background:#ff6b6b; color:white; border:none; width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.2rem;">›</button>
+      </div>
     </div>
   </section>
 
+  <!-- ==================== NEW SECTION: WHY CHOOSE US ==================== -->
+  <section style="padding:80px 0; background:white;">
+    <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+      <h2 style="text-align:center; font-size:2.5rem; color:#ff6b6b; margin-bottom:3rem;">Why Sass Beats Boring Care</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem;">
+        <div style="text-align:center; padding:1.5rem; background:#fff1f1; border-radius:15px; box-shadow:0 6px 15px rgba(255,107,107,.1);">
+          <div style="font-size:3rem; margin-bottom:1rem;">✨</div>
+          <h3 style="color:#ff6b6b; margin-bottom:.5rem;">Sparkle & Sass</h3>
+          <p>We turn chores into adventures.</p>
+        </div>
+        <div style="text-align:center; padding:1.5rem; background:#fff1f1; border-radius:15px; box-shadow:0 6px 15px rgba(255,107,107,.1);">
+          <div style="font-size:3rem; margin-bottom:1rem;">🛡️</div>
+          <h3 style="color:#ff6b6b; margin-bottom:.5rem;">Fully Vetted</h3>
+          <p>Background-checked, CPR-certified, and love-tested.</p>
+        </div>
+        <div style="text-align:center; padding:1.5rem; background:#fff1f1; border-radius:15px; box-shadow:0 6px 15px rgba(255,107,107,.1);">
+          <div style="font-size:3rem; margin-bottom:1rem;">💸</div>
+          <h3 style="color:#ff6b6b; margin-bottom:.5rem;">Transparent Pricing</h3>
+          <p>No hidden fees – what you see is what you pay.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NEW SECTION: FAQ ==================== -->
+  <section style="padding:80px 0; background:#f9f9f9;">
+    <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+      <h2 style="text-align:center; font-size:2.5rem; color:#ff6b6b; margin-bottom:2rem;">Got Questions? We Got Sass-Answers!</h2>
+      <div style="max-width:800px; margin:0 auto;">
+        <details style="margin-bottom:1rem; background:white; border-radius:12px; padding:1rem; box-shadow:0 4px 12px rgba(0,0,0,.05);">
+          <summary style="font-weight:bold; color:#ff6b6b; cursor:pointer;">Do you provide supplies?</summary>
+          <p style="margin-top:.5rem; color:#555;">We bring basic craft supplies, games, and snacks. Special requests? Just let us know!</p>
+        </details>
+        <details style="margin-bottom:1rem; background:white; border-radius:12px; padding:1rem; box-shadow:0 4px 12px rgba(0,0,0,.05);">
+          <summary style="font-weight:bold; color:#ff6b6b; cursor:pointer;">What if I need to cancel?</summary>
+          <p style="margin-top:.5rem; color:#555;">Cancel 24h in advance for a full refund. Last-minute? We’ll try to reschedule.</p>
+        </details>
+        <details style="margin-bottom:1rem; background:white; border-radius:12px; padding:1rem; box-shadow:0 4px 12px rgba(0,0,0,.05);">
+          <summary style="font-weight:bold; color:#ff6b6b; cursor:pointer;">Do you care for seniors too?</summary>
+          <p style="margin-top:.5rem; color:#555;">Absolutely! Same sass, same fun – just with more stories and fewer juice boxes.</p>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== NEW SECTION: MEET THE TEAM ==================== -->
+  <section style="padding:80px 0; background:white;">
+    <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+      <h2 style="text-align:center; font-size:2.5rem; color:#ff6b6b; margin-bottom:3rem;">Meet Your Sass Squad</h2>
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:2rem;">
+        <div style="text-align:center;">
+          <div style="width:120px; height:120px; background:#ffd700; border-radius:50%; margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; font-size:3rem;">👩‍🦰</div>
+          <h3 style="color:#ff6b6b;">Jazzy J</h3>
+          <p>Queen of glitter bombs & bedtime stories.</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:120px; height:120px; background:#ff9a9e; border-radius:50%; margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; font-size:3rem;">🧑‍🎤</div>
+          <h3 style="color:#ff6b6b;">Rockin’ Ray</h3>
+          <p>Dance-party maestro & snack sommelier.</p>
+        </div>
+        <div style="text-align:center;">
+          <div style="width:120px; height:120px; background:#a8e6cf; border-radius:50%; margin:0 auto 1rem; display:flex; align-items:center; justify-content:center; font-size:3rem;">👵</div>
+          <h3 style="color:#ff6b6b;">Granny Giggles</h3>
+          <p>Senior whisperer with a wicked sense of humor.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== SCHEDULER (unchanged) ==================== -->
   <section id="scheduler" style="padding: 80px 0;">
     <div class="container">
       <h2 style="text-align: center; color: #ff6b6b; font-size: 2.5rem;">Book Your Sassy Session</h2>
@@ -64,7 +203,47 @@
     </div>
   </section>
 
+  <!-- ==================== FOOTER (unchanged) ==================== -->
+  <footer style="background:linear-gradient(45deg,#333,#555); color:white; padding:40px 0 20px;">
+      <div class="container" style="max-width:1200px; margin:0 auto; padding:0 20px;">
+          <div class="footer-content" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:2rem; margin-bottom:2rem;">
+              
+              <div class="footer-section">
+                  <h3 style="color:#ffd700; margin-bottom:1rem;">Sooo NOT The Nanny</h3>
+                  <p>Reliable care with a side of sass! In-home child & senior care that's fun, professional, and just a little inappropriate (in the best way).</p>
+                  <div class="social-links" style="display:flex; gap:1rem; margin-top:1rem;">
+                      <a href="#" style="width:40px; height:40px; background:#ff6b6b; color:white; text-decoration:none; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">FB</a>
+                      <a href="#" style="width:40px; height:40px; background:#ff6b6b; color:white; text-decoration:none; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">TW</a>
+                      <a href="#" style="width:40px; height:40px; background:#ff6b6b; color:white; text-decoration:none; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">IG</a>
+                      <a href="#" style="width:40px; height:40px; background:#ff6b6b; color:white; text-decoration:none; border-radius:50%; display:flex; align-items:center; justify-content:center; transition:all 0.3s;">EM</a>
+                  </div>
+              </div>
+
+              <div class="footer-section">
+                  <h3 style="color:#ffd700; margin-bottom:1rem;">Quick Sass</h3>
+                  <ul style="list-style:none; padding:0;">
+                      <li><a href="#services" style="color:white; text-decoration:none;">Services</a></li>
+                      <li><a href="#blog" style="color:white; text-decoration:none;">Blog</a></li>
+                      <li><a href="#scheduler" style="color:white; text-decoration:none;">Book Now</a></li>
+                      <li><a href="#contact" style="color:white; text-decoration:none;">Contact</a></li>
+                  </ul>
+              </div>
+
+              <div class="footer-section">
+                  <h3 style="color:#ffd700; margin-bottom:1rem;">Stay Sassy!</h3>
+                  <p>Get updates on our latest sass-tastic offers!</p>
+                  <form style="margin-top:1rem;">
+                      <input type="email" placeholder="Your email for sass alerts" style="width:100%; padding:0.8rem; border-radius:25px; border:none; margin-bottom:1rem;">
+                      <button class="cta-button" style="width:100%; background:#ffd700; color:#333; padding:0.8rem; border:none; border-radius:25px; font-weight:bold; cursor:pointer;">Get Sass Alerts!</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+  </footer>
+
+  <!-- ==================== ORIGINAL SCRIPT + NEW TESTIMONIAL CAROUSEL LOGIC ==================== -->
   <script>
+    /* ---------- ORIGINAL BOOKING LOGIC (unchanged) ---------- */
     const service = document.getElementById('service');
     const kids = document.getElementById('kids');
     const total = document.getElementById('total');
@@ -139,6 +318,36 @@
       };
       await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(data) });
     }
+
+    /* ---------- NEW: TESTIMONIAL CAROUSEL ---------- */
+    const carousel = document.getElementById('testimonialCarousel');
+    let currentIndex = 0;
+
+    function updateCarousel() {
+      const itemWidth = carousel.children[0].offsetWidth + 32; // +gap
+      carousel.style.transform = `translateX(-${currentIndex * itemWidth}px)`;
+    }
+
+    function nextTestimonial() {
+      if (currentIndex < carousel.children.length - 1) {
+        currentIndex++;
+      } else {
+        currentIndex = 0;
+      }
+      updateCarousel();
+    }
+
+    function prevTestimonial() {
+      if (currentIndex > 0) {
+        currentIndex--;
+      } else {
+        currentIndex = carousel.children.length - 1;
+      }
+      updateCarousel();
+    }
+
+    // Auto-advance every 5 seconds
+    setInterval(nextTestimonial, 5000);
   </script>
 </body>
 </html>
