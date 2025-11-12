@@ -3,7 +3,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const path = require('path');
 const nodemailer = require('nodemailer');
-const paypal = require('@paypal/checkout-server-sdk'); // Modern PayPal SDK
+const { Client, Environment, LogLevel } = require('@paypal/paypal-server-sdk'); // New PayPal SDK
 
 const app = express();
 
@@ -61,12 +61,18 @@ function updateTransporter() {
   }
 }
 
-// PayPal Environment (Sandbox = test, Live = real money)
-function paypalEnvironment() {
+// PayPal Client (Sandbox = test, Live = real money)
+function getPayPalClient() {
   const clientId = adminConfig.paypalClientId || process.env.PAYPAL_CLIENT_ID;
   const clientSecret = adminConfig.paypalSecret || process.env.PAYPAL_SECRET;
   if (!clientId || !clientSecret) return null;
-  return new paypal.core.SandboxEnvironment(clientId, clientSecret); // Change to LiveEnvironment for production
+
+  return new Client({
+    environment: new Environment.Sandbox(clientId, clientSecret), // Change to Environment.Live for production
+    logging: {
+      logLevel: LogLevel.Info // Optional: Logs requests/responses
+    }
+  });
 }
 
 // ===== MongoDB Connection & Server Start =====
@@ -201,26 +207,27 @@ app.post('/api/payment/stripe', async (req, res) => {
 // ===== PayPal: Create Order =====
 app.post('/api/payment/paypal', async (req, res) => {
   const { amount } = req.body;
-  const env = paypalEnvironment();
-  if (!env) return res.status(400).json({ error: 'PayPal not configured' });
+  const client = getPayPalClient();
+  if (!client) return res.status(400).json({ error: 'PayPal not configured' });
 
-  const client = new paypal.core.PayPalHttpClient(env);
-  const request = new paypal.orders.OrdersCreateRequest();
-  request.prefer("return=representation");
-  request.requestBody({
-    intent: 'CAPTURE',
-    purchase_units: [{
-      amount: {
-        currency_code: 'USD',
-        value: amount.toFixed(2)
-      },
-      description: 'Sassy Nanny Booking'
-    }]
+  const request = new client.request({
+    method: 'POST',
+    url: '/v2/checkout/orders',
+    body: {
+      intent: 'CAPTURE',
+      purchase_units: [{
+        amount: {
+          currency_code: 'USD',
+          value: amount.toFixed(2)
+        },
+        description: 'Sassy Nanny Booking'
+      }]
+    }
   });
 
   try {
-    const order = await client.execute(request);
-    res.json({ orderID: order.result.id });
+    const order = await client.request(request);
+    res.json({ orderID: order.id });
   } catch (err) {
     console.error('PayPal Create Error:', err);
     res.status(500).json({ error: err.message });
@@ -232,17 +239,19 @@ app.post('/api/payment/paypal/capture', async (req, res) => {
   const { orderID } = req.body;
   if (!orderID) return res.status(400).json({ error: 'Missing order ID' });
 
-  const env = paypalEnvironment();
-  if (!env) return res.status(400).json({ error: 'PayPal not configured' });
+  const client = getPayPalClient();
+  if (!client) return res.status(400).json({ error: 'PayPal not configured' });
 
-  const client = new paypal.core.PayPalHttpClient(env);
-  const request = new paypal.orders.OrdersCaptureRequest(orderID);
-  request.requestBody({});
+  const request = new client.request({
+    method: 'POST',
+    url: `/v2/checkout/orders/${orderID}/capture`,
+    body: {}
+  });
 
   try {
-    const capture = await client.execute(request);
-    if (capture.result.status === 'COMPLETED') {
-      res.json({ success: true, capture: capture.result });
+    const capture = await client.request(request);
+    if (capture.status === 'COMPLETED') {
+      res.json({ success: true, capture });
     } else {
       res.status(400).json({ error: 'Payment not completed' });
     }
